@@ -28,43 +28,42 @@ class Transaction
      */
     private $date;
 
-    public function __construct(User $user, string $currency, float $amount, Carbon $date)
+    /**
+     * @var string
+     */
+    private $type;
+
+    public function __construct(User $user, string $currency, float $amount, string $type, Carbon $date)
     {
+        $this->user = $user;
         $this->currency = $currency;
         $this->amount = $amount;
+        $this->type = $type;
         $this->date = $date;
-        $this->user = $user;
     }
 
-    /**
-     * @return string
-     */
     public function getCurrency(): string
     {
         return $this->currency;
     }
 
-    /**
-     * @return float
-     */
     public function getAmount(): float
     {
         return $this->amount;
     }
 
-    /**
-     * @return Carbon
-     */
     public function getDate(): Carbon
     {
         return $this->date;
     }
 
-    /**
-     * @return User
-     */
     public function getUser(): User
     {
         return $this->user;
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
     }
 }
