@@ -29,11 +29,11 @@ class Transaction
     private $date;
 
     /**
-     * @var string
+     * @var TransactionType
      */
     private $type;
 
-    public function __construct(User $user, string $currency, float $amount, string $type, Carbon $date)
+    public function __construct(User $user, string $currency, float $amount, TransactionType $type, Carbon $date)
     {
         $this->user = $user;
         $this->currency = $currency;
@@ -62,7 +62,7 @@ class Transaction
         return $this->user;
     }
 
-    public function getType(): string
+    public function getType(): TransactionType
     {
         return $this->type;
     }
