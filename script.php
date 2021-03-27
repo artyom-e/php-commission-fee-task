@@ -4,6 +4,7 @@ use App\CommissionTask\Cli\ArgumentValidator;
 use App\CommissionTask\Cli\Log;
 use App\CommissionTask\Collection\TransactionCollection;
 use App\CommissionTask\Exception\Cli\CliException;
+use App\CommissionTask\Exception\Currency\CurrencyException;
 use App\CommissionTask\Exception\File\FileException;
 use App\CommissionTask\Model\Transaction;
 use App\CommissionTask\Model\TransactionType;
@@ -49,5 +50,7 @@ try {
 } catch(CliException $exception) {
     $log->error($exception->getMessage());
 } catch(FileException $exception) {
+    $log->error($exception->getMessage());
+} catch(CurrencyException $exception) {
     $log->error($exception->getMessage());
 }
