@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\CommissionTask\Resolver;
 
 use App\CommissionTask\Config\CommissionRule;
+use App\CommissionTask\Exception\Currency\CurrencyConversionNotSupportedException;
 use App\CommissionTask\Exception\User\UserTypeNotSupportedException;
 use App\CommissionTask\Model\UserType;
 use App\CommissionTask\Service\Currency;
@@ -24,11 +25,11 @@ class CashOutCommissionResolver extends AbstractCommissionResolver
      * @var array
      */
     private $naturalRules;
-
+    
     /**
      * @return string
-     *
      * @throws UserTypeNotSupportedException
+     * @throws CurrencyConversionNotSupportedException
      */
     public function resolve(): string
     {
@@ -45,7 +46,7 @@ class CashOutCommissionResolver extends AbstractCommissionResolver
     /**
      * @return string
      *
-     * @throws \App\CommissionTask\Exception\Currency\CurrencyConversionNotSupportedException
+     * @throws CurrencyConversionNotSupportedException
      */
     private function resolveLegal(): string
     {
@@ -63,8 +64,9 @@ class CashOutCommissionResolver extends AbstractCommissionResolver
      */
     private function resolveNatural(): string
     {
-        //@todo implements method
-        return '0.0';
+        $commission = '0.0';
+    
+        return Currency::round($commission, $this->transaction->getCurrency());
     }
 
     protected function initRules()

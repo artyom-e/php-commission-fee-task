@@ -29,9 +29,14 @@ class CommissionRule
                 ],
                 'percentage' => '0.3',
             ],
-
-            //@todo implement init natural user rules
-            'natural' => [],
+            'natural' => [
+                'percentage' => '0.3',
+                'zero_commission_rules' => [
+                    'max_amount_per_week' => '1000.00',
+                    'currency' => Currency::EUR_CODE,
+                    'max_transactions_per_week' => 3,
+                ]
+            ],
         ];
     }
 }
