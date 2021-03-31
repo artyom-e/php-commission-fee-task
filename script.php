@@ -28,11 +28,11 @@ try {
         $transactionType = new TransactionType((string)$row[3]);
         $transaction = new Transaction($user, (string)$row[5], (float)$row[4], $transactionType, Carbon::parse($row[0]));
         switch ($transactionType->getName()) {
-            case 'cash_in':
+            case TransactionType::CASH_IN:
                 $resolver = new CashInCommissionResolver($transaction, $transactionCollection->allByUser($user));
                 
                 break;
-            case 'cash_out':
+            case TransactionType::CASH_OUT:
                 $resolver = new CashOutCommissionResolver($transaction, $transactionCollection->allByUser($user));
                 
                 break;
