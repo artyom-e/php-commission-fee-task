@@ -4,6 +4,7 @@ use App\CommissionTask\Cli\ArgumentValidator;
 use App\CommissionTask\Cli\Log;
 use App\CommissionTask\Collection\TransactionCollection;
 use App\CommissionTask\Exception\AbstractHumanReadableException;
+use App\CommissionTask\Exception\Transaction\TransactionTypeNotSupportedException;
 use App\CommissionTask\Model\Transaction;
 use App\CommissionTask\Model\TransactionType;
 use App\CommissionTask\Model\User;
@@ -36,8 +37,7 @@ try {
                 
                 break;
             default:
-                $log->warning(sprintf("Transaction type '%s' is not supported.", $transactionType->getName()));
-                continue;
+                throw new TransactionTypeNotSupportedException($transactionType->getName());
         }
         $commission = $resolver->resolve();
         $log->info($commission);
