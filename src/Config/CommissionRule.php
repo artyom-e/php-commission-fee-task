@@ -21,7 +21,17 @@ class CommissionRule
 
     public static function getCashOutRules(): array
     {
-        //@todo implements method
-        return [];
+        return [
+            'legal' => [
+                'min_commission' => [
+                    'value' => '0.50',
+                    'currency' => Currency::EUR_CODE,
+                ],
+                'percentage' => '0.3',
+            ],
+
+            //@todo implement init natural user rules
+            'natural' => [],
+        ];
     }
 }

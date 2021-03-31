@@ -34,6 +34,12 @@ class Currency
         return $convertor->convert($amount);
     }
 
+    public static function round(string $amount, string $currency): string
+    {
+        //@todo implement method
+        return $amount;
+    }
+
     /**
      * @param string $from currency code
      * @param string $to   currency code

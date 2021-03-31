@@ -41,9 +41,8 @@ class CashInCommissionResolver extends AbstractCommissionResolver
         if ($this->math->comp($commissionInBaseCurrency, $this->maxFee) === 1) {
             $commission = Currency::convert($this->maxFee, $this->maxFeeCurrency, $this->transaction->getCurrency());
         }
-        //@todo add rounding response
 
-        return $commission;
+        return Currency::round($commission, $this->transaction->getCurrency());
     }
 
     protected function initRules()
