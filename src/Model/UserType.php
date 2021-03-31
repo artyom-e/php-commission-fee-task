@@ -6,6 +6,9 @@ namespace App\CommissionTask\Model;
 
 class UserType
 {
+    const LEGAL = 'legal';
+    const NATURAL = 'natural';
+
     /**
      * @var string
      */
