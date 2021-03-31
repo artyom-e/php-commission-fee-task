@@ -18,6 +18,10 @@ class Currency
     const JPY_CODE = 'JPY';
 
     /**
+     * @param string $amount conversion amount in $from currency
+     * @param string $from   currency code
+     * @param string $to     currency code
+     *
      * @throws CurrencyConversionNotSupportedException
      */
     public static function convert(string $amount, string $from, string $to): string
@@ -31,35 +35,68 @@ class Currency
     }
 
     /**
+     * @param string $from currency code
+     * @param string $to   currency code
+     *
      * @throws CurrencyConversionNotSupportedException
      */
     private static function getConvertor(string $from, string $to): AbstractConvertor
     {
         if ($to === self::EUR_CODE) {
-            switch ($from) {
-                case self::USD_CODE:
-                    return new UsdToEurConvertor();
-                case self::JPY_CODE:
-                    return new JpyToEurConvertor();
-                default:
-                    throw new CurrencyConversionNotSupportedException($from, $to);
-            }
+            return self::getConvertorForEur($from);
         } elseif ($to === self::USD_CODE) {
-            switch ($from) {
-                case self::EUR_CODE:
-                    return new EurToUsdConvertor();
-                default:
-                    throw new CurrencyConversionNotSupportedException($from, $to);
-            }
+            return self::getConvertorForUsd($from);
         } elseif ($to === self::JPY_CODE) {
-            switch ($from) {
-                case self::EUR_CODE:
-                    return new EurToJpyConvertor();
-                default:
-                    throw new CurrencyConversionNotSupportedException($from, $to);
-            }
+            return self::getConvertorForJpy($from);
         }
 
         throw new CurrencyConversionNotSupportedException($from, $to);
+    }
+
+    /**
+     * @param string $from currency code
+     *
+     * @throws CurrencyConversionNotSupportedException
+     */
+    private static function getConvertorForEur(string $from): AbstractConvertor
+    {
+        switch ($from) {
+            case self::USD_CODE:
+                return new UsdToEurConvertor();
+            case self::JPY_CODE:
+                return new JpyToEurConvertor();
+            default:
+                throw new CurrencyConversionNotSupportedException($from, self::EUR_CODE);
+        }
+    }
+
+    /**
+     * @param string $from currency code
+     *
+     * @throws CurrencyConversionNotSupportedException
+     */
+    private static function getConvertorForUsd(string $from): AbstractConvertor
+    {
+        switch ($from) {
+            case self::EUR_CODE:
+                return new EurToUsdConvertor();
+            default:
+                throw new CurrencyConversionNotSupportedException($from, self::USD_CODE);
+        }
+    }
+
+    /**
+     * @param string $from currency code
+     *
+     * @throws CurrencyConversionNotSupportedException
+     */
+    private static function getConvertorForJpy(string $from): AbstractConvertor
+    {
+        switch ($from) {
+            case self::EUR_CODE:
+                return new EurToJpyConvertor();
+            default:
+                throw new CurrencyConversionNotSupportedException($from, self::JPY_CODE);
+        }
     }
 }
