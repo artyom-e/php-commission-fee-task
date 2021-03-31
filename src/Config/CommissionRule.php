@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\CommissionTask\Config;
 
+use App\CommissionTask\Service\Currency;
+
 class CommissionRule
 {
     public static function getCashInRules(): array
@@ -11,7 +13,7 @@ class CommissionRule
         return [
             'max_commission' => [
                 'value' => '5.00',
-                'currency' => 'EUR',
+                'currency' => Currency::EUR_CODE,
             ],
             'percentage' => '0.03',
         ];

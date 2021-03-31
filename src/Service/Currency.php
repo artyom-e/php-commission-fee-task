@@ -13,6 +13,10 @@ use App\CommissionTask\Service\CurrencyConvertor\UsdToEurConvertor;
 
 class Currency
 {
+    const EUR_CODE = 'EUR';
+    const USD_CODE = 'USD';
+    const JPY_CODE = 'JPY';
+
     /**
      * @throws CurrencyConversionNotSupportedException
      */
@@ -31,25 +35,25 @@ class Currency
      */
     private static function getConvertor(string $from, string $to): AbstractConvertor
     {
-        if ($to === 'EUR') {
+        if ($to === self::EUR_CODE) {
             switch ($from) {
-                case 'USD':
+                case self::USD_CODE:
                     return new UsdToEurConvertor();
-                case 'JPY':
+                case self::JPY_CODE:
                     return new JpyToEurConvertor();
                 default:
                     throw new CurrencyConversionNotSupportedException($from, $to);
             }
-        } elseif ($to === 'USD') {
+        } elseif ($to === self::USD_CODE) {
             switch ($from) {
-                case 'EUR':
+                case self::EUR_CODE:
                     return new EurToUsdConvertor();
                 default:
                     throw new CurrencyConversionNotSupportedException($from, $to);
             }
-        } elseif ($to === 'JPY') {
+        } elseif ($to === self::JPY_CODE) {
             switch ($from) {
-                case 'EUR':
+                case self::EUR_CODE:
                     return new EurToJpyConvertor();
                 default:
                     throw new CurrencyConversionNotSupportedException($from, $to);
