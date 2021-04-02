@@ -36,8 +36,17 @@ class Currency
 
     public static function round(string $amount, string $currency): string
     {
-        //@todo implement method
-        return $amount;
+        switch ($currency) {
+            case Currency::JPY_CODE:
+                $precision = 0;
+                break;
+            default:
+                $precision = 2;
+        }
+        $math = new Math($precision + 1);
+        $pow = (string) pow(10, $precision);
+
+        return number_format((ceil($math->mul($pow, $amount)) + ceil($math->mul($pow, $amount) - ceil($math->mul($pow, $amount)))) / $pow, $precision, '.', '');
     }
 
     /**
