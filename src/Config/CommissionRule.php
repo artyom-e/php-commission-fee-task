@@ -35,7 +35,7 @@ class CommissionRule
                     'max_amount_per_week' => '1000.00',
                     'currency' => Currency::EUR_CODE,
                     'max_transactions_per_week' => 3,
-                ]
+                ],
             ],
         ];
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\CommissionTask\Resolver;
 
+use App\CommissionTask\Collection\TransactionByUserCollection;
 use App\CommissionTask\Model\Transaction;
 use App\CommissionTask\Service\Math;
 
@@ -15,16 +16,16 @@ abstract class AbstractCommissionResolver
     protected $transaction;
 
     /**
-     * @var Transaction[]
+     * @var TransactionByUserCollection
      */
-    private $userTransactions;
+    protected $userTransactions;
 
     /**
      * @var Math
      */
     protected $math;
 
-    public function __construct(Transaction $transaction, array $userTransactions)
+    public function __construct(Transaction $transaction, TransactionByUserCollection $userTransactions)
     {
         $this->transaction = $transaction;
         $this->userTransactions = $userTransactions;

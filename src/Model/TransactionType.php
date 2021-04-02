@@ -8,7 +8,7 @@ class TransactionType
 {
     const CASH_IN = 'cash_in';
     const CASH_OUT = 'cash_out';
-    
+
     /**
      * @var string
      */

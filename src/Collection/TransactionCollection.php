@@ -10,7 +10,7 @@ use App\CommissionTask\Model\User;
 class TransactionCollection
 {
     /**
-     * @var array
+     * @var TransactionByUserCollection[]
      */
     private $transactions;
 
@@ -26,38 +26,23 @@ class TransactionCollection
             $this->push($transaction);
         }
     }
-    
-    /**
-     * Get all user transactions
-     * @param User $user
-     *
-     * @return array
-     */
-    public function allByUser(User $user): array
-    {
-        return $this->transactions[$user->getId()] ?? [];
-    }
-    
-    /**
-     * Get all user transactions with specific transaction type
-     *
-     * @param User   $user
-     * @param string $type transaction type
-     *
-     * @return array
-     */
-    public function allByUserTransactionType(User $user, string $type): array
-    {
-        $transactions = $this->transactions[$user->getId()] ?? [];
 
-        return array_filter($transactions, function (Transaction $transaction) use ($type) {
-            return $transaction->getType()->getName() === $type;
-        });
+    /**
+     * Get all user transactions.
+     *
+     * @return TransactionByUserCollection
+     */
+    public function allByUser(User $user): TransactionByUserCollection
+    {
+        return $this->transactions[$user->getId()] ?? new TransactionByUserCollection();
     }
 
     public function push(Transaction $transaction): TransactionCollection
     {
-        $this->transactions[$transaction->getUser()->getId()][] = $transaction;
+        if (!isset($this->transactions[$transaction->getUser()->getId()])) {
+            $this->transactions[$transaction->getUser()->getId()] = new TransactionByUserCollection();
+        }
+        $this->transactions[$transaction->getUser()->getId()]->push($transaction);
 
         return $this;
     }

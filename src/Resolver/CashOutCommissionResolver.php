@@ -7,6 +7,7 @@ namespace App\CommissionTask\Resolver;
 use App\CommissionTask\Config\CommissionRule;
 use App\CommissionTask\Exception\Currency\CurrencyConversionNotSupportedException;
 use App\CommissionTask\Exception\User\UserTypeNotSupportedException;
+use App\CommissionTask\Model\TransactionType;
 use App\CommissionTask\Model\UserType;
 use App\CommissionTask\Service\Currency;
 
@@ -25,9 +26,10 @@ class CashOutCommissionResolver extends AbstractCommissionResolver
      * @var array
      */
     private $naturalRules;
-    
+
     /**
      * @return string
+     *
      * @throws UserTypeNotSupportedException
      * @throws CurrencyConversionNotSupportedException
      */
@@ -64,8 +66,27 @@ class CashOutCommissionResolver extends AbstractCommissionResolver
      */
     private function resolveNatural(): string
     {
-        $commission = '0.0';
-    
+        $cashOutTransactions = $this->userTransactions->allByTransactionType(TransactionType::CASH_OUT);
+        $transactionDate = $this->transaction->getDate();
+        $transactionCount = $cashOutTransactions->countByWeek($transactionDate->weekOfYear, $transactionDate->year);
+        $transactionSum = $cashOutTransactions->sumByWeek($transactionDate->weekOfYear, $transactionDate->year, $this->naturalRules['zero_commission_rules']['currency']);
+        $transactionAmountInBaseCurrency = Currency::convert($this->transaction->getAmount(), $this->transaction->getCurrency(), $this->naturalRules['zero_commission_rules']['currency']);
+        $transactionSumAfterNewTransaction = $this->math->add($transactionSum, $transactionAmountInBaseCurrency);
+
+        $amountForCommission = $this->transaction->getAmount();
+        if ($transactionCount < $this->naturalRules['zero_commission_rules']['max_transactions_per_week']) {
+            if ($this->math->comp($transactionSum, $this->naturalRules['zero_commission_rules']['max_amount_per_week']) === -1) {
+                if ($this->math->comp($transactionSumAfterNewTransaction, $this->naturalRules['zero_commission_rules']['max_amount_per_week']) === 1) {
+                    $amount = $this->math->sub($transactionSumAfterNewTransaction, $this->naturalRules['zero_commission_rules']['max_amount_per_week']);
+                    $amountForCommission = Currency::convert($amount, $this->naturalRules['zero_commission_rules']['currency'], $this->transaction->getCurrency());
+                } else {
+                    //transaction sum lte max transaction amount per week
+                    $amountForCommission = '0.00';
+                }
+            }
+        }
+        $commission = $this->math->mul($amountForCommission, $this->math->div($this->naturalRules['percentage'], '100'));
+
         return Currency::round($commission, $this->transaction->getCurrency());
     }
 

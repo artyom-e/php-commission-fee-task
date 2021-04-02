@@ -18,6 +18,11 @@ class Math
         return bcadd($leftOperand, $rightOperand, $this->scale);
     }
 
+    public function sub(string $leftOperand, string $rightOperand): string
+    {
+        return bcsub($leftOperand, $rightOperand, $this->scale);
+    }
+
     public function div(string $leftOperand, string $rightOperand): string
     {
         return bcdiv($leftOperand, $rightOperand, $this->scale);
