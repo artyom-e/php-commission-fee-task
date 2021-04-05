@@ -34,8 +34,6 @@ class TransactionByUserCollection
      * Get all transactions with specific transaction type.
      *
      * @param string $type transaction type
-     *
-     * @return TransactionByUserCollection
      */
     public function allByTransactionType(string $type): TransactionByUserCollection
     {
@@ -48,8 +46,6 @@ class TransactionByUserCollection
 
     /**
      * Get sum of all transaction costs in specified currency for specified week.
-     *
-     * @return string
      *
      * @throws CurrencyConversionNotSupportedException
      */
@@ -69,8 +65,6 @@ class TransactionByUserCollection
 
     /**
      * Get count of all transactions for specified week.
-     *
-     * @return int
      */
     public function countByWeek(int $weekOfYear, int $year): int
     {
@@ -84,9 +78,6 @@ class TransactionByUserCollection
         return $count;
     }
 
-    /**
-     * @return bool
-     */
     private function isWeekEqual(Carbon $date, int $weekOfYear, int $year): bool
     {
         return $date->weekOfYear === $weekOfYear && ($date->copy()->startOfWeek()->year === $year || $date->copy()->endOfWeek()->year === $year);

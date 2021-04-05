@@ -28,8 +28,6 @@ class CashOutCommissionResolver extends AbstractCommissionResolver
     private $naturalRules;
 
     /**
-     * @return string
-     *
      * @throws UserTypeNotSupportedException
      * @throws CurrencyConversionNotSupportedException
      */
@@ -46,8 +44,6 @@ class CashOutCommissionResolver extends AbstractCommissionResolver
     }
 
     /**
-     * @return string
-     *
      * @throws CurrencyConversionNotSupportedException
      */
     private function resolveLegal(): string
@@ -61,9 +57,6 @@ class CashOutCommissionResolver extends AbstractCommissionResolver
         return Currency::round($commission, $this->transaction->getCurrency());
     }
 
-    /**
-     * @return string
-     */
     private function resolveNatural(): string
     {
         $cashOutTransactions = $this->userTransactions->allByTransactionType(TransactionType::CASH_OUT);

@@ -29,8 +29,6 @@ class TransactionCollection
 
     /**
      * Get all user transactions.
-     *
-     * @return TransactionByUserCollection
      */
     public function allByUser(User $user): TransactionByUserCollection
     {
