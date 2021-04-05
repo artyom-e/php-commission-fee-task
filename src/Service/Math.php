@@ -35,6 +35,6 @@ class Math
 
     public function comp(string $leftOperand, string $rightOperand): int
     {
-        return bccomp($leftOperand, $rightOperand);
+        return bccomp($leftOperand, $rightOperand, $this->scale);
     }
 }
