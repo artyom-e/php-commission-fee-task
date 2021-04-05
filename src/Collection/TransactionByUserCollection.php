@@ -89,7 +89,7 @@ class TransactionByUserCollection
      */
     private function isWeekEqual(Carbon $date, int $weekOfYear, int $year): bool
     {
-        return $date->weekOfYear === $weekOfYear && $date->year === $year;
+        return $date->weekOfYear === $weekOfYear && ($date->copy()->startOfWeek()->year === $year || $date->copy()->endOfWeek()->year === $year);
     }
 
     public function push(Transaction $transaction): TransactionByUserCollection
