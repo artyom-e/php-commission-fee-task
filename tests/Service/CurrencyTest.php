@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\CommissionTask\Tests\Service;
 
 use App\CommissionTask\Config\CurrencyConversionRate;
+use App\CommissionTask\Service\Currency;
 use App\CommissionTask\Service\Math;
 use PHPUnit\Framework\TestCase;
 
@@ -78,6 +79,21 @@ class CurrencyTest extends TestCase
         );
     }
     
+    /**
+     * @param string $amount
+     * @param string $currency
+     * @param string $expectation
+     *
+     * @dataProvider roundProvider
+     */
+    public function testRound(string $amount, string $currency, string $expectation)
+    {
+        $this->assertEquals(
+            $expectation,
+            Currency::round($amount, $currency)
+        );
+    }
+    
     public function convertEurToJpyProvider()
     {
         return [
@@ -115,6 +131,26 @@ class CurrencyTest extends TestCase
             ['5', '4.3489605984'],
             ['-5', '-4.3489605984'],
             ['5.59', '4.8621379490'],
+        ];
+    }
+    
+    public function roundProvider()
+    {
+        return [
+            ['1', Currency::USD_CODE, '1.00'],
+            ['1.4', Currency::USD_CODE, '1.40'],
+            ['1.561', Currency::USD_CODE, '1.57'],
+            ['1.569', Currency::USD_CODE, '1.57'],
+            
+            ['1', Currency::EUR_CODE, '1.00'],
+            ['1.4', Currency::EUR_CODE, '1.40'],
+            ['1.561', Currency::EUR_CODE, '1.57'],
+            ['1.569', Currency::EUR_CODE, '1.57'],
+
+            ['1', Currency::JPY_CODE, '1'],
+            ['1.4', Currency::JPY_CODE, '2'],
+            ['1.111', Currency::JPY_CODE, '2'],
+            ['1.666', Currency::JPY_CODE, '2'],
         ];
     }
 }
