@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\CommissionTask\Service\CurrencyConvertor;
+namespace App\CommissionTask\Service\CurrencyConverter;
 
 use App\CommissionTask\Service\Math;
 
-abstract class AbstractConvertor
+abstract class AbstractConverter
 {
     protected $math;
 

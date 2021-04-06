@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\CommissionTask\Service;
 
 use App\CommissionTask\Exception\Currency\CurrencyConversionNotSupportedException;
-use App\CommissionTask\Service\CurrencyConvertor\AbstractConvertor;
-use App\CommissionTask\Service\CurrencyConvertor\EurToJpyConvertor;
-use App\CommissionTask\Service\CurrencyConvertor\EurToUsdConvertor;
-use App\CommissionTask\Service\CurrencyConvertor\JpyToEurConvertor;
-use App\CommissionTask\Service\CurrencyConvertor\UsdToEurConvertor;
+use App\CommissionTask\Service\CurrencyConverter\AbstractConverter;
+use App\CommissionTask\Service\CurrencyConverter\EurToJpyConverter;
+use App\CommissionTask\Service\CurrencyConverter\EurToUsdConverter;
+use App\CommissionTask\Service\CurrencyConverter\JpyToEurConverter;
+use App\CommissionTask\Service\CurrencyConverter\UsdToEurConverter;
 
 class Currency
 {
@@ -29,9 +29,9 @@ class Currency
         if ($from === $to) {
             return $amount;
         }
-        $convertor = static::getConvertor($from, $to);
+        $converter = static::getConverter($from, $to);
 
-        return $convertor->convert($amount);
+        return $converter->convert($amount);
     }
 
     /**
@@ -60,14 +60,14 @@ class Currency
      *
      * @throws CurrencyConversionNotSupportedException
      */
-    private static function getConvertor(string $from, string $to): AbstractConvertor
+    private static function getConverter(string $from, string $to): AbstractConverter
     {
         if ($to === self::EUR_CODE) {
-            return self::getConvertorForEur($from);
+            return self::getConverterForEur($from);
         } elseif ($to === self::USD_CODE) {
-            return self::getConvertorForUsd($from);
+            return self::getConverterForUsd($from);
         } elseif ($to === self::JPY_CODE) {
-            return self::getConvertorForJpy($from);
+            return self::getConverterForJpy($from);
         }
 
         throw new CurrencyConversionNotSupportedException($from, $to);
@@ -78,13 +78,13 @@ class Currency
      *
      * @throws CurrencyConversionNotSupportedException
      */
-    private static function getConvertorForEur(string $from): AbstractConvertor
+    private static function getConverterForEur(string $from): AbstractConverter
     {
         switch ($from) {
             case self::USD_CODE:
-                return new UsdToEurConvertor();
+                return new UsdToEurConverter();
             case self::JPY_CODE:
-                return new JpyToEurConvertor();
+                return new JpyToEurConverter();
             default:
                 throw new CurrencyConversionNotSupportedException($from, self::EUR_CODE);
         }
@@ -95,11 +95,11 @@ class Currency
      *
      * @throws CurrencyConversionNotSupportedException
      */
-    private static function getConvertorForUsd(string $from): AbstractConvertor
+    private static function getConverterForUsd(string $from): AbstractConverter
     {
         switch ($from) {
             case self::EUR_CODE:
-                return new EurToUsdConvertor();
+                return new EurToUsdConverter();
             default:
                 throw new CurrencyConversionNotSupportedException($from, self::USD_CODE);
         }
@@ -110,11 +110,11 @@ class Currency
      *
      * @throws CurrencyConversionNotSupportedException
      */
-    private static function getConvertorForJpy(string $from): AbstractConvertor
+    private static function getConverterForJpy(string $from): AbstractConverter
     {
         switch ($from) {
             case self::EUR_CODE:
-                return new EurToJpyConvertor();
+                return new EurToJpyConverter();
             default:
                 throw new CurrencyConversionNotSupportedException($from, self::JPY_CODE);
         }

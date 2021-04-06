@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\CommissionTask\Service\CurrencyConvertor;
+namespace App\CommissionTask\Service\CurrencyConverter;
 
 use App\CommissionTask\Config\CurrencyConversionRate;
 
-class UsdToEurConvertor extends AbstractConvertor
+class JpyToEurConverter extends AbstractConverter
 {
     /**
      * {@inheritdoc}
      */
     public function convert(string $amount): string
     {
-        return $this->math->div($amount, CurrencyConversionRate::getUsdInEur());
+        return $this->math->div($amount, CurrencyConversionRate::getJpyInEur());
     }
 }
