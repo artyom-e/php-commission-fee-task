@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\CommissionTask\Tests\Collection;
 
 use App\CommissionTask\Collection\TransactionByUserCollection;
-use App\CommissionTask\Collection\TransactionCollection;
 use App\CommissionTask\Exception\Collection\DifferentUsersInCollectionException;
 use App\CommissionTask\Model\Transaction;
 use App\CommissionTask\Model\TransactionType;

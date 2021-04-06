@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\CommissionTask\Tests\Collection;
 
 use App\CommissionTask\Collection\TransactionByUserCollection;
