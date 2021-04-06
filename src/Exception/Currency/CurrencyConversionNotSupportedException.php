@@ -12,7 +12,7 @@ class CurrencyConversionNotSupportedException extends AbstractHumanReadableExcep
 {
     public function __construct(string $from, string $to, $code = 0, Throwable $previous = null)
     {
-        parent::__construct(sprintf("Conversion between '{$from}-{$to}' is not supported"), $code, $previous);
+        parent::__construct(sprintf("Conversion between '{$from}-{$to}' is not supported."), $code, $previous);
     }
 
     public function getLogLevel(): string
