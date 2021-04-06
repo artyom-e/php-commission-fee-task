@@ -86,7 +86,7 @@ class CashOutCommissionResolver extends AbstractCommissionResolver
     protected function initRules()
     {
         $rules = CommissionRule::getCashOutRules();
-        $this->legalRules = $rules['legal'];
-        $this->naturalRules = $rules['natural'];
+        $this->legalRules = $rules[UserType::LEGAL];
+        $this->naturalRules = $rules[UserType::NATURAL];
     }
 }

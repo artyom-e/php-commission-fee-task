@@ -54,8 +54,8 @@ class CashOutCommissionResolverTest extends TestCase
     
     public function cashOutForLegalProvider()
     {
-        $user = new User(1, new UserType('legal'));
-        $transactionType = new TransactionType('cash_out');
+        $user = new User(1, new UserType(UserType::LEGAL));
+        $transactionType = new TransactionType(TransactionType::CASH_OUT);
         
         return [
             [
@@ -106,8 +106,8 @@ class CashOutCommissionResolverTest extends TestCase
     
     public function cashOutForNaturalProvider()
     {
-        $user = new User(1, new UserType('natural'));
-        $transactionType = new TransactionType('cash_out');
+        $user = new User(1, new UserType(UserType::NATURAL));
+        $transactionType = new TransactionType(TransactionType::CASH_OUT);
         
         return [
             [

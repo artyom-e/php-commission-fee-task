@@ -22,14 +22,14 @@ class CommissionRule
     public static function getCashOutRules(): array
     {
         return [
-            'legal' => [
+            UserType::LEGAL => [
                 'min_commission' => [
                     'value' => '0.50',
                     'currency' => Currency::EUR_CODE,
                 ],
                 'percentage' => '0.3',
             ],
-            'natural' => [
+            UserType::NATURAL => [
                 'percentage' => '0.3',
                 'zero_commission_rules' => [
                     'max_amount_per_week' => '1000.00',
