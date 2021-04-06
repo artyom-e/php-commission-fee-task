@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace App\CommissionTask\Config;
 
+use App\CommissionTask\Model\UserType;
 use App\CommissionTask\Service\Currency;
 
 class CommissionRule
 {
+    /**
+     * Returns rules for cash in transactions.
+     */
     public static function getCashInRules(): array
     {
         return [
@@ -19,6 +23,11 @@ class CommissionRule
         ];
     }
 
+    /**
+     * Returns rules for cash out transactions.
+     *
+     * @return array[]
+     */
     public static function getCashOutRules(): array
     {
         return [

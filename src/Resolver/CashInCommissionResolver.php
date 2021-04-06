@@ -45,6 +45,9 @@ class CashInCommissionResolver extends AbstractCommissionResolver
         return Currency::round($commission, $this->transaction->getCurrency());
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function initRules()
     {
         $rules = CommissionRule::getCashInRules();

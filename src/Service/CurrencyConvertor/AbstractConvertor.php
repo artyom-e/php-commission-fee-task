@@ -15,5 +15,8 @@ abstract class AbstractConvertor
         $this->math = new Math(10);
     }
 
+    /**
+     * Convert currency.
+     */
     abstract public function convert(string $amount): string;
 }

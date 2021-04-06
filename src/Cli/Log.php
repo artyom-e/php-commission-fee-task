@@ -18,6 +18,9 @@ class Log
         $this->print("\033[31m{$message}\033[0m");
     }
 
+    /**
+     * Print message using default color.
+     */
     public function info(string $message)
     {
         $this->print($message);

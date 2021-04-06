@@ -15,8 +15,6 @@ class TransactionCollection
     private $transactions;
 
     /**
-     * TransactionCollection constructor.
-     *
      * @param Transaction[] $transactions
      */
     public function __construct($transactions = [])
@@ -35,6 +33,9 @@ class TransactionCollection
         return $this->transactions[$user->getId()] ?? new TransactionByUserCollection();
     }
 
+    /**
+     * Push transaction to collection.
+     */
     public function push(Transaction $transaction): TransactionCollection
     {
         if (!isset($this->transactions[$transaction->getUser()->getId()])) {

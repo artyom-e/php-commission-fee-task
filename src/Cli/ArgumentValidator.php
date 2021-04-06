@@ -14,6 +14,12 @@ class ArgumentValidator
      */
     private $arguments;
 
+    /**
+     * Key - argument name
+     * Value - argument index.
+     *
+     * @var array
+     */
     private $argumentsMapping = [
         'path' => 1,
     ];
@@ -48,6 +54,8 @@ class ArgumentValidator
     }
 
     /**
+     * Check existing file.
+     *
      * @throws FileNotFoundException
      */
     private function validatePathExists()
@@ -58,6 +66,9 @@ class ArgumentValidator
         }
     }
 
+    /**
+     * Build arguments response.
+     */
     private function buildArguments(): array
     {
         $data = [];

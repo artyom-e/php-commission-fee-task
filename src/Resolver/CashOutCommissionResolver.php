@@ -44,6 +44,8 @@ class CashOutCommissionResolver extends AbstractCommissionResolver
     }
 
     /**
+     * Calculate commission for legal user cash out transaction.
+     *
      * @throws CurrencyConversionNotSupportedException
      */
     private function resolveLegal(): string
@@ -57,6 +59,11 @@ class CashOutCommissionResolver extends AbstractCommissionResolver
         return Currency::round($commission, $this->transaction->getCurrency());
     }
 
+    /**
+     * Calculate commission for natural user cash out transaction.
+     *
+     * @throws CurrencyConversionNotSupportedException
+     */
     private function resolveNatural(): string
     {
         $cashOutTransactions = $this->userTransactions->allByTransactionType(TransactionType::CASH_OUT);
@@ -83,6 +90,9 @@ class CashOutCommissionResolver extends AbstractCommissionResolver
         return Currency::round($commission, $this->transaction->getCurrency());
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function initRules()
     {
         $rules = CommissionRule::getCashOutRules();

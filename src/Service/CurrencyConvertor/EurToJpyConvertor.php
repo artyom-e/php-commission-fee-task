@@ -8,6 +8,9 @@ use App\CommissionTask\Config\CurrencyConversionRate;
 
 class EurToJpyConvertor extends AbstractConvertor
 {
+    /**
+     * {@inheritdoc}
+     */
     public function convert(string $amount): string
     {
         return $this->math->mul($amount, CurrencyConversionRate::getJpyInEur());

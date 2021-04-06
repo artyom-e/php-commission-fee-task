@@ -18,8 +18,6 @@ class TransactionByUserCollection
     private $transactions;
 
     /**
-     * TransactionCollection constructor.
-     *
      * @param Transaction[] $transactions
      */
     public function __construct($transactions = [])
@@ -78,11 +76,17 @@ class TransactionByUserCollection
         return $count;
     }
 
+    /**
+     * Сhecking the coincidence of weeks.
+     */
     private function isWeekEqual(Carbon $date, int $weekOfYear, int $year): bool
     {
         return $date->weekOfYear === $weekOfYear && ($date->copy()->startOfWeek()->year === $year || $date->copy()->endOfWeek()->year === $year);
     }
 
+    /**
+     * Push transaction to collection.
+     */
     public function push(Transaction $transaction): TransactionByUserCollection
     {
         $this->transactions[] = $transaction;

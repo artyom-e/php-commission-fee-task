@@ -34,6 +34,9 @@ class Currency
         return $convertor->convert($amount);
     }
 
+    /**
+     * Round amount based on specified currency.
+     */
     public static function round(string $amount, string $currency): string
     {
         switch ($currency) {
@@ -50,6 +53,8 @@ class Currency
     }
 
     /**
+     * Returns converter based on specified currency pair.
+     *
      * @param string $from currency code
      * @param string $to   currency code
      *
