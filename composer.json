@@ -15,7 +15,8 @@
     },
     "require": {
         "php": ">=7.0",
-        "ext-bcmath": "*"
+        "ext-bcmath": "*",
+        "nesbot/carbon": "^1.39"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.5",
