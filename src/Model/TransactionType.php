@@ -23,4 +23,14 @@ class TransactionType
     {
         return $this->name;
     }
+
+    public static function cashIn(): TransactionType
+    {
+        return new self(self::CASH_IN);
+    }
+
+    public static function cashOut(): TransactionType
+    {
+        return new self(self::CASH_OUT);
+    }
 }

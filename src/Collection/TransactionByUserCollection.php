@@ -4,14 +4,21 @@ declare(strict_types=1);
 
 namespace App\CommissionTask\Collection;
 
+use App\CommissionTask\Exception\Collection\DifferentUsersInCollectionException;
 use App\CommissionTask\Exception\Currency\CurrencyConversionNotSupportedException;
 use App\CommissionTask\Model\Transaction;
+use App\CommissionTask\Model\User;
 use App\CommissionTask\Service\Currency;
 use App\CommissionTask\Service\Math;
 use Carbon\Carbon;
 
 class TransactionByUserCollection
 {
+    /**
+     * @var User
+     */
+    private $user;
+
     /**
      * @var Transaction[]
      */
@@ -86,9 +93,16 @@ class TransactionByUserCollection
 
     /**
      * Push transaction to collection.
+     *
+     * @throws DifferentUsersInCollectionException
      */
     public function push(Transaction $transaction): TransactionByUserCollection
     {
+        if (!$this->user) {
+            $this->user = $transaction->getUser();
+        } elseif ($this->user->getId() !== $transaction->getUser()->getId()) {
+            throw new DifferentUsersInCollectionException();
+        }
         $this->transactions[] = $transaction;
 
         return $this;

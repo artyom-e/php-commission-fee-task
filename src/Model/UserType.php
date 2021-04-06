@@ -23,4 +23,14 @@ class UserType
     {
         return $this->name;
     }
+
+    public static function legal(): UserType
+    {
+        return new self(self::LEGAL);
+    }
+
+    public static function natural(): UserType
+    {
+        return new self(self::NATURAL);
+    }
 }

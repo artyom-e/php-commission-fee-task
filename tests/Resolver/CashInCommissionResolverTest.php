@@ -34,8 +34,8 @@ class CashInCommissionResolverTest extends TestCase
     
     public function cashInProvider()
     {
-        $legalUser = new User(1, new UserType(UserType::LEGAL));
-        $naturalUser = new User(2, new UserType(UserType::NATURAL));
+        $legalUser = new User(1, UserType::legal());
+        $naturalUser = new User(2, UserType::natural());
         $transactionType = new TransactionType(TransactionType::CASH_IN);
         
         return [
