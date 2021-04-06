@@ -34,6 +34,24 @@ class CashOutCommissionResolverTest extends TestCase
         $this->assertEquals($expectation, $resolver->resolve());
     }
     
+    /**
+     * @param Transaction                 $transaction
+     * @param TransactionByUserCollection $userTransactions
+     * @param string                      $expectation
+     *
+     * @throws CurrencyConversionNotSupportedException
+     * @throws UserTypeNotSupportedException
+     * @dataProvider cashOutForNaturalProvider
+     */
+    public function testCashOutForNatural(
+        Transaction $transaction,
+        TransactionByUserCollection $userTransactions,
+        string $expectation
+    ) {
+        $resolver = new CashOutCommissionResolver($transaction, $userTransactions);
+        $this->assertEquals($expectation, $resolver->resolve());
+    }
+    
     public function cashOutForLegalProvider()
     {
         $user = new User(1, new UserType('legal'));
@@ -81,6 +99,228 @@ class CashOutCommissionResolverTest extends TestCase
                     Carbon::parse('2020-01-02')),
                 new TransactionByUserCollection(),
                 '51.00'
+            ],
+        ];
+    }
+    
+    
+    public function cashOutForNaturalProvider()
+    {
+        $user = new User(1, new UserType('natural'));
+        $transactionType = new TransactionType('cash_out');
+        
+        return [
+            [
+                new Transaction($user, Currency::EUR_CODE, '900.00', $transactionType,
+                    Carbon::parse('2020-01-02')),
+                new TransactionByUserCollection(),
+                '0.00'
+            ],
+            [
+                new Transaction($user, Currency::EUR_CODE, '1000.00', $transactionType,
+                    Carbon::parse('2020-01-02')),
+                new TransactionByUserCollection(),
+                '0.00'
+            ],
+            [
+                new Transaction($user, Currency::EUR_CODE, '1001.00', $transactionType,
+                    Carbon::parse('2020-01-02')),
+                new TransactionByUserCollection(),
+                '0.01'
+            ],
+            [
+                new Transaction($user, Currency::EUR_CODE, '1000.00', $transactionType,
+                    Carbon::parse('2020-01-02')),
+                new TransactionByUserCollection([
+                    new Transaction($user, Currency::EUR_CODE, '1000.00', $transactionType, Carbon::parse('2020-01-01')),
+                ]),
+                '3.00'
+            ],
+            [
+                new Transaction($user, Currency::EUR_CODE, '1000.00', $transactionType,
+                    Carbon::parse('2020-01-06')),
+                new TransactionByUserCollection([
+                    new Transaction($user, Currency::EUR_CODE, '1000.00', $transactionType, Carbon::parse('2020-01-01')),
+                ]),
+                '0.00'
+            ],
+            [
+                new Transaction($user, Currency::EUR_CODE, '10.00', $transactionType,
+                    Carbon::parse('2020-01-02')),
+                new TransactionByUserCollection([
+                    new Transaction($user, Currency::EUR_CODE, '10.00', $transactionType, Carbon::parse('2019-12-30')),
+                    new Transaction($user, Currency::EUR_CODE, '20.00', $transactionType, Carbon::parse('2019-12-31')),
+                ]),
+                '0.00'
+            ],
+            [
+                new Transaction($user, Currency::EUR_CODE, '10.00', $transactionType,
+                    Carbon::parse('2020-01-02')),
+                new TransactionByUserCollection([
+                    new Transaction($user, Currency::EUR_CODE, '10.00', $transactionType, Carbon::parse('2019-12-30')),
+                    new Transaction($user, Currency::EUR_CODE, '20.00', $transactionType, Carbon::parse('2019-12-31')),
+                    new Transaction($user, Currency::EUR_CODE, '30.00', $transactionType, Carbon::parse('2020-01-01')),
+                ]),
+                '0.03'
+            ],
+            [
+                new Transaction($user, Currency::EUR_CODE, '10.00', $transactionType,
+                    Carbon::parse('2020-01-06')),
+                new TransactionByUserCollection([
+                    new Transaction($user, Currency::EUR_CODE, '10.00', $transactionType, Carbon::parse('2019-12-30')),
+                    new Transaction($user, Currency::EUR_CODE, '20.00', $transactionType, Carbon::parse('2019-12-31')),
+                    new Transaction($user, Currency::EUR_CODE, '30.00', $transactionType, Carbon::parse('2020-01-01')),
+                ]),
+                '0.00'
+            ],
+            
+            //USD
+            [
+                new Transaction($user, Currency::USD_CODE, '1000.00', $transactionType,
+                    Carbon::parse('2020-01-02')),
+                new TransactionByUserCollection(),
+                '0.00'
+            ],
+            [
+                new Transaction($user, Currency::USD_CODE, '1149.70', $transactionType,
+                    Carbon::parse('2020-01-02')),
+                new TransactionByUserCollection(),
+                '0.00'
+            ],
+            [
+                new Transaction($user, Currency::USD_CODE, '1150.00', $transactionType,
+                    Carbon::parse('2020-01-02')),
+                new TransactionByUserCollection(),
+                '0.01'
+            ],
+            [
+                new Transaction($user, Currency::USD_CODE, '1149.70', $transactionType,
+                    Carbon::parse('2020-01-02')),
+                new TransactionByUserCollection([
+                    new Transaction($user, Currency::USD_CODE, '1149.70', $transactionType, Carbon::parse('2020-01-01')),
+                ]),
+                '3.45'
+            ],
+            [
+                new Transaction($user, Currency::USD_CODE, '1149.70', $transactionType,
+                    Carbon::parse('2020-01-06')),
+                new TransactionByUserCollection([
+                    new Transaction($user, Currency::USD_CODE, '1149.70', $transactionType, Carbon::parse('2020-01-01')),
+                ]),
+                '0.00'
+            ],
+            [
+                new Transaction($user, Currency::USD_CODE, '10.00', $transactionType,
+                    Carbon::parse('2020-01-02')),
+                new TransactionByUserCollection([
+                    new Transaction($user, Currency::USD_CODE, '10.00', $transactionType, Carbon::parse('2019-12-30')),
+                    new Transaction($user, Currency::USD_CODE, '20.00', $transactionType, Carbon::parse('2019-12-31')),
+                ]),
+                '0.00'
+            ],
+            [
+                new Transaction($user, Currency::USD_CODE, '10.00', $transactionType,
+                    Carbon::parse('2020-01-02')),
+                new TransactionByUserCollection([
+                    new Transaction($user, Currency::USD_CODE, '10.00', $transactionType, Carbon::parse('2019-12-30')),
+                    new Transaction($user, Currency::USD_CODE, '20.00', $transactionType, Carbon::parse('2019-12-31')),
+                    new Transaction($user, Currency::USD_CODE, '30.00', $transactionType, Carbon::parse('2020-01-01')),
+                ]),
+                '0.03'
+            ],
+            [
+                new Transaction($user, Currency::USD_CODE, '10.00', $transactionType,
+                    Carbon::parse('2020-01-06')),
+                new TransactionByUserCollection([
+                    new Transaction($user, Currency::USD_CODE, '10.00', $transactionType, Carbon::parse('2019-12-30')),
+                    new Transaction($user, Currency::USD_CODE, '20.00', $transactionType, Carbon::parse('2019-12-31')),
+                    new Transaction($user, Currency::USD_CODE, '30.00', $transactionType, Carbon::parse('2020-01-01')),
+                ]),
+                '0.00'
+            ],
+
+            //JPY
+            [
+                new Transaction($user, Currency::JPY_CODE, '120000', $transactionType,
+                    Carbon::parse('2020-01-02')),
+                new TransactionByUserCollection(),
+                '0'
+            ],
+            [
+                new Transaction($user, Currency::JPY_CODE, '129530', $transactionType,
+                    Carbon::parse('2020-01-02')),
+                new TransactionByUserCollection(),
+                '0'
+            ],
+            [
+                new Transaction($user, Currency::JPY_CODE, '129630', $transactionType,
+                    Carbon::parse('2020-01-02')),
+                new TransactionByUserCollection(),
+                '1'
+            ],
+            [
+                new Transaction($user, Currency::JPY_CODE, '129530', $transactionType,
+                    Carbon::parse('2020-01-02')),
+                new TransactionByUserCollection([
+                    new Transaction($user, Currency::JPY_CODE, '129530', $transactionType, Carbon::parse('2020-01-01')),
+                ]),
+                '389'
+            ],
+            [
+                new Transaction($user, Currency::JPY_CODE, '129530', $transactionType,
+                    Carbon::parse('2020-01-06')),
+                new TransactionByUserCollection([
+                    new Transaction($user, Currency::JPY_CODE, '129530', $transactionType, Carbon::parse('2020-01-01')),
+                ]),
+                '0'
+            ],
+            [
+                new Transaction($user, Currency::JPY_CODE, '300', $transactionType,
+                    Carbon::parse('2020-01-02')),
+                new TransactionByUserCollection([
+                    new Transaction($user, Currency::JPY_CODE, '400', $transactionType, Carbon::parse('2019-12-30')),
+                    new Transaction($user, Currency::JPY_CODE, '500', $transactionType, Carbon::parse('2019-12-31')),
+                ]),
+                '0'
+            ],
+            [
+                new Transaction($user, Currency::JPY_CODE, '3000', $transactionType,
+                    Carbon::parse('2020-01-02')),
+                new TransactionByUserCollection([
+                    new Transaction($user, Currency::JPY_CODE, '400', $transactionType, Carbon::parse('2019-12-30')),
+                    new Transaction($user, Currency::JPY_CODE, '500', $transactionType, Carbon::parse('2019-12-31')),
+                    new Transaction($user, Currency::JPY_CODE, '600', $transactionType, Carbon::parse('2020-01-01')),
+                ]),
+                '9'
+            ],
+            [
+                new Transaction($user, Currency::JPY_CODE, '3000', $transactionType,
+                    Carbon::parse('2020-01-06')),
+                new TransactionByUserCollection([
+                    new Transaction($user, Currency::JPY_CODE, '400', $transactionType, Carbon::parse('2019-12-30')),
+                    new Transaction($user, Currency::JPY_CODE, '500', $transactionType, Carbon::parse('2019-12-31')),
+                    new Transaction($user, Currency::JPY_CODE, '600', $transactionType, Carbon::parse('2020-01-01')),
+                ]),
+                '0'
+            ],
+
+            //different currencies
+            [
+                new Transaction($user, Currency::USD_CODE, '1138.20', $transactionType,
+                    Carbon::parse('2020-01-03')),
+                new TransactionByUserCollection([
+                    new Transaction($user, Currency::EUR_CODE, '10.00', $transactionType, Carbon::parse('2019-12-30')),
+                ]),
+                '0.00'
+            ],
+            [
+                new Transaction($user, Currency::USD_CODE, '500', $transactionType,
+                    Carbon::parse('2020-01-03')),
+                new TransactionByUserCollection([
+                    new Transaction($user, Currency::EUR_CODE, '10.00', $transactionType, Carbon::parse('2019-12-30')),
+                    new Transaction($user, Currency::JPY_CODE, '1000', $transactionType, Carbon::parse('2019-12-30')),
+                ]),
+                '0.00'
             ],
         ];
     }
